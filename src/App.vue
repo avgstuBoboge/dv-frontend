@@ -1,25 +1,44 @@
 <script setup>
 import SwissMap from "./components/SwissMap.vue";
+import Nav from "./components/Nav.vue";
+import SideBarLeft from "./components/SideBarLeft.vue";
+import SideBarRight from "./components/SideBarRight.vue";
 </script>
 
 <template>
-  <h1>Swiss Map Demo</h1>
-  <SwissMap/>
+  <div class="common-layout">
+    <el-container>
+      <el-header style="height: 150px; border-bottom: 5px solid rgb(220,0,24);">
+        <Nav/>
+      </el-header>
+      <el-container>
+        <el-aside width="15%" class="side-bar-left">
+          <SideBarLeft/>
+        </el-aside>
+        <el-container>
+          <el-main style="padding-top: 0">
+            <SwissMap/>
+          </el-main>
+        </el-container>
+        <el-aside width="20%" class="side-bar-right">
+          <SideBarRight/>
+        </el-aside>
+      </el-container>
+    </el-container>
+  </div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.el-header {
+  height: 60px; /* set a fixed height */
+  overflow: hidden; /* prevent overflowing content */
+  display: flex; /* align header content */
+  align-items: center; /* vertically center the items */
+  /* add other styles as needed */
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.side-bar-left {
+  background-color: #f0f0f0;
+  padding: 10px;
 }
 </style>

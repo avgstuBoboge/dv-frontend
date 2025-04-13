@@ -6,21 +6,26 @@ import * as topojson from "topojson-client";
 const svgContainer = ref(null);
 
 onMounted(async () => {
-  const width = 800;
-  const height = 600;
+  const width = 800;   // logical width
+  const height = 600;  // logical height
 
   const topoData = await d3.json("/geo/switzerland_cantons.geojson");
-
   const objectKey = Object.keys(topoData.objects)[0];
   const geoData = topojson.feature(topoData, topoData.objects[objectKey]);
 
   const svg = d3
       .select(svgContainer.value)
       .append("svg")
-      .attr("width", width)
-      .attr("height", height);
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
 
-  const projection = d3.geoMercator()
+  // Append a group element to hold the map elements
+  const g = svg.append("g");
+
+  const projection = d3
+      .geoMercator()
       .center([8.2275, 46.8182])
       .scale(10000)
       .translate([width / 2, height / 2]);
@@ -28,7 +33,8 @@ onMounted(async () => {
 
   const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
-  const tooltip = d3.select("body")
+  const tooltip = d3
+      .select("body")
       .append("div")
       .attr("class", "tooltip")
       .style("position", "absolute")
@@ -39,7 +45,7 @@ onMounted(async () => {
       .style("pointer-events", "none")
       .style("opacity", 0);
 
-  svg.selectAll("path")
+  g.selectAll("path")
       .data(geoData.features)
       .enter()
       .append("path")
@@ -55,17 +61,20 @@ onMounted(async () => {
             .attr("fill-opacity", 1)
             .attr("stroke", "black")
             .attr("stroke-width", 2);
-        tooltip.transition()
+        tooltip
+            .transition()
             .duration(200)
             .style("opacity", 0.9);
-        tooltip.html(`<strong>${d.properties.name}</strong><br/>GDP: $<em>(placeholder)</em>`)
+        tooltip
+            .html(`<strong>${d.properties.name}</strong><br/>GDP: $<em>(placeholder)</em>`)
             .style("color", "red")
-            .style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 28) + "px");
+            .style("left", event.pageX + 10 + "px")
+            .style("top", event.pageY - 28 + "px");
       })
       .on("mousemove", function (event) {
-        tooltip.style("left", (event.pageX + 10) + "px")
-            .style("top", (event.pageY - 28) + "px");
+        tooltip
+            .style("left", event.pageX + 10 + "px")
+            .style("top", event.pageY - 28 + "px");
       })
       .on("mouseout", function () {
         d3.select(this)
@@ -74,21 +83,34 @@ onMounted(async () => {
             .attr("fill-opacity", 0.5)
             .attr("stroke", "#666")
             .attr("stroke-width", 1);
-        tooltip.transition()
+        tooltip
+            .transition()
             .duration(200)
             .style("opacity", 0);
       });
+
+  // Add zoom functionality
+  const zoom = d3.zoom()
+      .scaleExtent([1, 8])
+      .on("zoom", (event) => {
+        g.attr("transform", event.transform);
+      });
+
+  svg.call(zoom);
 });
 </script>
 
 <template>
-  <div ref="svgContainer"></div>
+  <el-card>
+    <div ref="svgContainer" class="svg-container"></div>
+  </el-card>
 </template>
 
 <style scoped>
-div {
+.svg-container {
   width: 100%;
-  max-width: 800px;
+  height: 100%;
+  border: 1px solid #ccc;
   margin: auto;
 }
 
