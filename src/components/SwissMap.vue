@@ -9,7 +9,7 @@ onMounted(async () => {
   const width = 800;   // logical width
   const height = 600;  // logical height
 
-  const topoData = await d3.json("/geo/switzerland_cantons.geojson");
+  const topoData = await d3.json(import.meta.env.BASE_URL + "/geo/switzerland_cantons.geojson");
   const objectKey = Object.keys(topoData.objects)[0];
   const geoData = topojson.feature(topoData, topoData.objects[objectKey]);
 

@@ -7,7 +7,7 @@
     <div class="logo-container">
       <el-image
           style="height: 100px;"
-          src="src/assets/swiss-flag.png"
+          src="swiss-flag.png"
           fit="contain"/>
     </div>
     <h1>Swiss Map Demo</h1>
