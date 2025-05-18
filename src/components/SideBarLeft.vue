@@ -3,9 +3,7 @@
 </script>
 
 <template>
-  <el-menu
-      class="el-menu-demo"
-      router>
+  <el-menu class="el-menu-demo">
     <el-sub-menu index="1">
       <template #title>GDP</template>
       <el-menu-item index="1-1">2023</el-menu-item>

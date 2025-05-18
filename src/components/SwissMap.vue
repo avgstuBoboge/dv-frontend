@@ -2,6 +2,7 @@
 import {onMounted, ref} from "vue";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
+import store from "../store.js";
 
 const svgContainer = ref(null);
 
@@ -87,6 +88,12 @@ onMounted(async () => {
             .transition()
             .duration(200)
             .style("opacity", 0);
+      })
+      .on("click", function (event, d) {
+        store.state.selectedRegion = {
+          name: d.properties.name,
+          id: d.id,
+        }
       });
 
   // Add zoom functionality

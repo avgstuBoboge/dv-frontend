@@ -1,4 +1,9 @@
 <script setup>
+import store from "../store.js"
+
+function handlePush(route) {
+  store.state.router.push(route);
+}
 </script>
 
 <template>
@@ -13,8 +18,8 @@
       <h1>Happiness Index Across Swiss Cantons</h1>
     </div>
     <el-menu mode="horizontal" default-active="1">
-      <el-menu-item index="1" style="font-size: 20px">Overview</el-menu-item>
-      <el-menu-item index="2" style="font-size: 20px">Ranking</el-menu-item>
+      <el-menu-item index="1" style="font-size: 20px" @click="handlePush('/overview')">Overview</el-menu-item>
+      <el-menu-item index="2" style="font-size: 20px" @click="handlePush('/ranking')">Ranking</el-menu-item>
     </el-menu>
   </div>
 </template>
