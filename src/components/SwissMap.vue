@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref} from "vue";
+import { onMounted, ref, watch } from "vue";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 import store from "../store.js";
@@ -7,8 +7,8 @@ import store from "../store.js";
 const svgContainer = ref(null);
 
 onMounted(async () => {
-  const width = 800;   // logical width
-  const height = 600;  // logical height
+  const width = 800;
+  const height = 600;
 
   const topoData = await d3.json(import.meta.env.BASE_URL + "/geo/switzerland_cantons.geojson");
   const objectKey = Object.keys(topoData.objects)[0];
@@ -22,7 +22,18 @@ onMounted(async () => {
       .attr("viewBox", `0 0 ${width} ${height}`)
       .attr("preserveAspectRatio", "xMidYMid meet");
 
-  // Append a group element to hold the map elements
+  svg.append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "transparent")
+      .lower()
+      .on("click", () => {
+        store.state.selectedRegion = {
+          name: null,
+          id: null,
+        }
+      });
+
   const g = svg.append("g");
 
   const projection = d3
@@ -46,7 +57,7 @@ onMounted(async () => {
       .style("pointer-events", "none")
       .style("opacity", 0);
 
-  g.selectAll("path")
+  const regions = g.selectAll("path")
       .data(geoData.features)
       .enter()
       .append("path")
@@ -78,25 +89,27 @@ onMounted(async () => {
             .style("top", event.pageY - 28 + "px");
       })
       .on("mouseout", function () {
-        d3.select(this)
-            .transition()
-            .duration(200)
-            .attr("fill-opacity", 0.5)
-            .attr("stroke", "#666")
-            .attr("stroke-width", 1);
+        if (!store.state.selectedRegion || store.state.selectedRegion.id !== this.__data__.id) {
+          d3.select(this)
+              .transition()
+              .duration(200)
+              .attr("fill-opacity", 0.5)
+              .attr("stroke", "#666")
+              .attr("stroke-width", 1);
+        }
         tooltip
             .transition()
             .duration(200)
             .style("opacity", 0);
       })
       .on("click", function (event, d) {
+        event.stopPropagation();
         store.state.selectedRegion = {
           name: d.properties.name,
           id: d.id,
-        }
+        };
       });
 
-  // Add zoom functionality
   const zoom = d3.zoom()
       .scaleExtent([1, 8])
       .on("zoom", (event) => {
@@ -104,6 +117,30 @@ onMounted(async () => {
       });
 
   svg.call(zoom);
+
+  watch(
+      () => store.state.selectedRegion,
+      (newVal) => {
+        regions.each(function (d) {
+          if (newVal && newVal.id === d.id) {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("fill-opacity", 1)
+                .attr("stroke", "black")
+                .attr("stroke-width", 2);
+          } else {
+            d3.select(this)
+                .transition()
+                .duration(200)
+                .attr("fill-opacity", 0.5)
+                .attr("stroke", "#666")
+                .attr("stroke-width", 1);
+          }
+        });
+      },
+      { immediate: true }
+  );
 });
 </script>
 
