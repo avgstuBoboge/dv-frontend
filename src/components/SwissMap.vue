@@ -28,10 +28,7 @@ onMounted(async () => {
       .attr("fill", "transparent")
       .lower()
       .on("click", () => {
-        store.state.selectedRegion = {
-          name: null,
-          id: null,
-        }
+        store.state.regionStack = [];
       });
 
   const g = svg.append("g");
@@ -89,7 +86,16 @@ onMounted(async () => {
             .style("top", event.pageY - 28 + "px");
       })
       .on("mouseout", function () {
-        if (!store.state.selectedRegion || store.state.selectedRegion.id !== this.__data__.id) {
+        let currentStack = store.state.regionStack;
+        let highlightIds = [];
+        if (store.state.comparing) {
+          const len = currentStack.length;
+          if (len > 0) highlightIds.push(currentStack[len - 1].id);
+          if (len > 1) highlightIds.push(currentStack[len - 2].id);
+        } else {
+          if (currentStack.length) highlightIds.push(currentStack[currentStack.length - 1].id);
+        }
+        if (!highlightIds.includes(this.__data__.id)) {
           d3.select(this)
               .transition()
               .duration(200)
@@ -104,10 +110,15 @@ onMounted(async () => {
       })
       .on("click", function (event, d) {
         event.stopPropagation();
-        store.state.selectedRegion = {
-          name: d.properties.name,
-          id: d.id,
-        };
+        if (
+            store.state.regionStack.length === 0 ||
+            store.state.regionStack[store.state.regionStack.length - 1].id !== d.id
+        ) {
+          store.commit("pushRegion", {
+            name: d.properties.name,
+            id: d.id,
+          });
+        }
       });
 
   const zoom = d3.zoom()
@@ -115,14 +126,21 @@ onMounted(async () => {
       .on("zoom", (event) => {
         g.attr("transform", event.transform);
       });
-
   svg.call(zoom);
 
   watch(
-      () => store.state.selectedRegion,
-      (newVal) => {
+      () => store.state.regionStack,
+      (newStack) => {
+        let highlightIds = [];
+        if (store.state.comparing) {
+          const len = newStack.length;
+          if (len > 0) highlightIds.push(newStack[len - 1].id);
+          if (len > 1) highlightIds.push(newStack[len - 2].id);
+        } else {
+          if (newStack.length) highlightIds.push(newStack[newStack.length - 1].id);
+        }
         regions.each(function (d) {
-          if (newVal && newVal.id === d.id) {
+          if (highlightIds.includes(d.id)) {
             d3.select(this)
                 .transition()
                 .duration(200)
@@ -139,7 +157,7 @@ onMounted(async () => {
           }
         });
       },
-      { immediate: true }
+      { immediate: true, deep: true }
   );
 });
 </script>
