@@ -20,7 +20,7 @@ const secondToLastSelectedRegion = computed(() => {
         v-model="comparing"
         active-text="Compare Cantons"
         inactive-text="Single Canton"
-        @click="store.state.regionStack = []; store.state.comparing = !store.state.comparing"
+        @click="store.state.regionStack = []; store.state.comparing = comparing"
     />
     <template v-if="comparing">
       <template v-if="secondToLastSelectedRegion.id">
