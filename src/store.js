@@ -27,15 +27,20 @@ name2Region["Graubünden"] = name2Region["Graubünden/Grigioni"];
 name2Region["Valais"] = name2Region["Valais/Wallis"];
 name2Region["Saint Gallen"] = name2Region["St. Gallen"];
 
-const keywords = ["language", "population", "religion", "social-condition", "gdp"];
+const keywords = ["language", "population", "religion", "social-condition", "GDP"];
 
 const data = {};
+// create a set of years for each keyword
+const years = {};
+keywords.forEach((kw) => {
+    years[kw] = new Set();
+});
 const modulesMap = {
     language: import.meta.glob(`/src/assets/data/language/*.tsv`, {as: 'raw'}),
     population: import.meta.glob(`/src/assets/data/population/*.tsv`, {as: 'raw'}),
     religion: import.meta.glob(`/src/assets/data/religion/*.tsv`, {as: 'raw'}),
     'social-condition': import.meta.glob(`/src/assets/data/social-condition/*.tsv`, {as: 'raw'}),
-    gdp: import.meta.glob(`/src/assets/data/gdp/*.tsv`, {as: 'raw'}),
+    gdp: import.meta.glob(`/src/assets/data/GDP/*.tsv`, {as: 'raw'}),
 };
 
 // create a set of missed regions
@@ -48,10 +53,11 @@ async function loadData(kw) {
         const content = await modules[path]();
         const data = d3.tsvParse(content);
         data.forEach((row) => {
-            if (kw === "gdp") {
+            if (kw === "GDP") {
                 const {Canton, ...values} = row;
                 const yearKeys = Object.keys(values);
                 yearKeys.forEach((year) => {
+                    years[kw].add(year);
                     const value = values[year];
                     if (!name2Region[Canton]) {
                         missedRegions.add(Canton);
@@ -60,11 +66,12 @@ async function loadData(kw) {
                         if (!data[id]) data[id] = {};
                         if (!data[id][year]) data[id][year] = {};
                         if (!data[id][year][kw]) data[id][year][kw] = {};
-                        data[id][year][kw]['gdp'] = value;
+                        data[id][year][kw]['GDP'] = value;
                     }
                 });
             } else {
                 const {title, year, value, canton, file_year} = row;
+                years[kw].add(year);
                 if (!name2Region[canton]) {
                     missedRegions.add(canton);
                 } else {
@@ -90,6 +97,8 @@ const store = createStore({
         router: null,
         regionStack: [],
         comparing: false,
+        data: data,
+        keywords: keywords,
     }),
     mutations: {
         setRouter(state, router) {
