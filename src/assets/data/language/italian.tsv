@@ -1,0 +1,244 @@
+title	year	value	canton	file_year
+Italian	2000	3.3	Aargau	2012
+Italian	2000	3.7	Geneva	2012
+Italian	2000	1.9	Lucerne	2012
+Italian	2000	1.8	Jura	2012
+Italian	2000	10.2	Graubünden	2012
+Italian	2000	4.4	Glarus	2012
+Italian	2000	1.7	Appenzell Ausserrhoden	2012
+Italian	2000	1.3	Fribourg	2012
+Italian	2000	5.0	Basel-Stadt	2012
+Italian	2000	3.5	Basel-Landschaft	2012
+Italian	2000	0.9	Appenzell Innerrhoden	2012
+Italian	2000	1.4	Nidwalden	2012
+Italian	2000	3.2	Neuchâtel	2012
+Italian	2000	2.0	Bern	2012
+Italian	2000	1.0	Obwalden	2012
+Italian	2000	2.8	Thurgau	2012
+Italian	2000	4.0	Zurich	2012
+Italian	2000	2.5	Zug	2012
+Italian	2000	2.9	Vaud	2012
+Italian	2000	2.2	Valais	2012
+Italian	2000	1.3	Uri	2012
+Italian	2000	6.5	Switzerland	2012
+Italian	2000	3.1	Solothurn	2012
+Italian	2000	1.9	Schwyz	2012
+Italian	2000	2.6	Schaffhausen	2012
+Italian	2000	2.3	Saint Gallen	2012
+Italian	2000	83.1	Ticino	2012
+Italian	2010	5.1	Aargau	2013
+Italian	2010	–	Appenzell Ausserrhoden	2013
+Italian	2010	–	Appenzell Innerrhoden	2013
+Italian	2010	6.1	Neuchâtel	2013
+Italian	2010	6.8	Basel-Stadt	2013
+Italian	2010	5.6	Basel-Landschaft	2013
+Italian	2010	–	Glarus	2013
+Italian	2010	7.3	Geneva	2013
+Italian	2010	12.3	Graubünden	2013
+Italian	2010	3.7	Jura	2013
+Italian	2010	3.2	Bern	2013
+Italian	2010	2.0	Fribourg	2013
+Italian	2010	3.1	Lucerne	2013
+Italian	2010	3.7	Valais	2013
+Italian	2010	–	Nidwalden	2013
+Italian	2010	5.8	Zurich	2013
+Italian	2010	3.5	Saint Gallen	2013
+Italian	2010	–	Schaffhausen	2013
+Italian	2010	3.5	Schwyz	2013
+Italian	2010	4.8	Solothurn	2013
+Italian	2010	4.1	Thurgau	2013
+Italian	2010	–	Obwalden	2013
+Italian	2010	–	Uri	2013
+Italian	2010	5.2	Vaud	2013
+Italian	2010	3.6	Zug	2013
+Italian	2010	8.4	Switzerland	2013
+Italian	2010	87.7	Ticino	2013
+Italian	2012	–	Glarus	2015
+Italian	2012	7.1	Geneva	2015
+Italian	2012	2.5	Fribourg	2015
+Italian	2012	2.9	Bern	2015
+Italian	2012	5.5	Basel-Stadt	2015
+Italian	2012	5.2	Aargau	2015
+Italian	2012	–	Appenzell Ausserrhoden	2015
+Italian	2012	12.0	Graubünden	2015
+Italian	2012	8.3	Switzerland	2015
+Italian	2012	4.4	Zug	2015
+Italian	2012	5.3	Vaud	2015
+Italian	2012	–	Appenzell Innerrhoden	2015
+Italian	2012	2.9	Jura	2015
+Italian	2012	4.4	Solothurn	2015
+Italian	2012	6.2	Neuchâtel	2015
+Italian	2012	5.8	Zurich	2015
+Italian	2012	3.8	Valais	2015
+Italian	2012	–	Uri	2015
+Italian	2012	87.7	Ticino	2015
+Italian	2012	3.9	Thurgau	2015
+Italian	2012	5.7	Basel-Landschaft	2015
+Italian	2012	2.8	Schwyz	2015
+Italian	2012	–	Nidwalden	2015
+Italian	2012	–	Obwalden	2015
+Italian	2012	2.8	Lucerne	2015
+Italian	2012	–	Schaffhausen	2015
+Italian	2012	3.6	Saint Gallen	2015
+Italian	2013	6.2	Neuchâtel	2016
+Italian	2013	–	Obwalden	2016
+Italian	2013	3.3	Saint Gallen	2016
+Italian	2013	4.1	Schaffhausen	2016
+Italian	2013	3.8	Thurgau	2016
+Italian	2013	5.0	Solothurn	2016
+Italian	2013	8.3	Bern	2016
+Italian	2013	88.2	Ticino	2016
+Italian	2013	–	Uri	2016
+Italian	2013	3.8	Valais	2016
+Italian	2013	5.2	Vaud	2016
+Italian	2013	4.2	Zug	2016
+Italian	2013	3.1	Schwyz	2016
+Italian	2013	–	Nidwalden	2016
+Italian	2013	2.8	Lucerne	2016
+Italian	2013	2.3	Fribourg	2016
+Italian	2013	5.7	Zurich	2016
+Italian	2013	4.9	Aargau	2016
+Italian	2013	–	Appenzell Ausserrhoden	2016
+Italian	2013	5.1	Basel-Landschaft	2016
+Italian	2013	–	Appenzell Innerrhoden	2016
+Italian	2013	3.1	Bern	2016
+Italian	2013	6.9	Geneva	2016
+Italian	2013	5.9	Glarus	2016
+Italian	2013	12.7	Graubünden	2016
+Italian	2013	3.2	Jura	2016
+Italian	2013	5.7	Basel-Stadt	2016
+Italian	2014	6.4	Basel-Stadt	2017
+Italian	2014	–	Appenzell Ausserrhoden	2017
+Italian	2014	–	Appenzell Innerrhoden	2017
+Italian	2014	5.0	Basel-Landschaft	2017
+Italian	2014	5.9	Neuchâtel	2017
+Italian	2014	5.1	Aargau	2017
+Italian	2014	7.2	Geneva	2017
+Italian	2014	–	Glarus	2017
+Italian	2014	12.8	Graubünden	2017
+Italian	2014	3.2	Jura	2017
+Italian	2014	3.1	Bern	2017
+Italian	2014	2.2	Fribourg	2017
+Italian	2014	–	Obwalden	2017
+Italian	2014	3.0	Lucerne	2017
+Italian	2014	–	Nidwalden	2017
+Italian	2014	–	Schaffhausen	2017
+Italian	2014	3.1	Schwyz	2017
+Italian	2014	4.8	Solothurn	2017
+Italian	2014	3.9	Thurgau	2017
+Italian	2014	4.1	Valais	2017
+Italian	2014	3.4	Saint Gallen	2017
+Italian	2014	5.1	Vaud	2017
+Italian	2014	4.4	Zug	2017
+Italian	2014	6.0	Zurich	2017
+Italian	2014	88.3	Ticino	2017
+Italian	2014	8.4	Bern	2017
+Italian	2014	–	Uri	2017
+Italian	2016	2.5	Fribourg	2018
+Italian	2016	3.2	Bern	2018
+Italian	2016	6.5	Basel-Stadt	2018
+Italian	2016	5.1	Basel-Landschaft	2018
+Italian	2016	–	Appenzell Innerrhoden	2018
+Italian	2016	–	Nidwalden	2018
+Italian	2016	5.2	Aargau	2018
+Italian	2016	6.8	Geneva	2018
+Italian	2016	8.5	Bern	2018
+Italian	2016	5.8	Zurich	2018
+Italian	2016	–	Glarus	2018
+Italian	2016	–	Appenzell Ausserrhoden	2018
+Italian	2016	13.1	Graubünden	2018
+Italian	2016	–	Jura	2018
+Italian	2016	6.1	Neuchâtel	2018
+Italian	2016	–	Schaffhausen	2018
+Italian	2016	2.9	Schwyz	2018
+Italian	2016	4.8	Solothurn	2018
+Italian	2016	88.8	Ticino	2018
+Italian	2016	–	Uri	2018
+Italian	2016	3.5	Saint Gallen	2018
+Italian	2016	5.3	Vaud	2018
+Italian	2016	4.2	Zug	2018
+Italian	2016	4.3	Thurgau	2018
+Italian	2016	–	Obwalden	2018
+Italian	2016	3.3	Lucerne	2018
+Italian	2016	4.2	Valais	2018
+Italian	2016-2018	6.0	Geneva	2020
+Italian	2016-2018	2.3	Fribourg	2020
+Italian	2016-2018	3.0	Bern	2020
+Italian	2016-2018	6.1	Basel-Stadt	2020
+Italian	2016-2018	5.3	Basel-Landschaft	2020
+Italian	2016-2018	5.0	Vaud	2020
+Italian	2016-2018	5.2	Aargau	2020
+Italian	2016-2018	3.8	Zug	2020
+Italian	2016-2018	5.7	Zurich	2020
+Italian	2016-2018	8.1	Switzerland	2020
+Italian	2016-2018	5.7	Glarus	2020
+Italian	2016-2018	2.2	Appenzell Ausserrhoden	2020
+Italian	2016-2018	12.8	Graubünden	2020
+Italian	2016-2018	–	Appenzell Innerrhoden	2020
+Italian	2016-2018	3.0	Lucerne	2020
+Italian	2016-2018	2.8	Jura	2020
+Italian	2016-2018	3.8	Valais	2020
+Italian	2016-2018	2.8	Uri	2020
+Italian	2016-2018	88.0	Ticino	2020
+Italian	2016-2018	4.1	Thurgau	2020
+Italian	2016-2018	4.8	Solothurn	2020
+Italian	2016-2018	5.3	Neuchâtel	2020
+Italian	2016-2018	2.9	Schwyz	2020
+Italian	2016-2018	3.8	Schaffhausen	2020
+Italian	2016-2018	3.4	Saint Gallen	2020
+Italian	2016-2018	–	Obwalden	2020
+Italian	2016-2018	2.6	Nidwalden	2020
+Italian	2017	3.7	Saint Gallen	2019
+Italian	2017	–	Schaffhausen	2019
+Italian	2017	3.3	Schwyz	2019
+Italian	2017	4.9	Solothurn	2019
+Italian	2017	4.3	Thurgau	2019
+Italian	2017	3.9	Valais	2019
+Italian	2017	5.9	Zurich	2019
+Italian	2017	5.4	Vaud	2019
+Italian	2017	3.7	Zug	2019
+Italian	2017	–	Nidwalden	2019
+Italian	2017	–	Obwalden	2019
+Italian	2017	–	Uri	2019
+Italian	2017	6.1	Neuchâtel	2019
+Italian	2017	88.8	Ticino	2019
+Italian	2017	–	Jura	2019
+Italian	2017	8.4	Switzerland	2019
+Italian	2017	5.4	Aargau	2019
+Italian	2017	–	Appenzell Ausserrhoden	2019
+Italian	2017	3.1	Lucerne	2019
+Italian	2017	5.1	Basel-Landschaft	2019
+Italian	2017	–	Appenzell Innerrhoden	2019
+Italian	2017	3.1	Bern	2019
+Italian	2017	2.3	Fribourg	2019
+Italian	2017	6.5	Geneva	2019
+Italian	2017	–	Glarus	2019
+Italian	2017	13.1	Graubünden	2019
+Italian	2017	6.3	Basel-Stadt	2019
+Italian	2019	3.3	Lucerne	2021
+Italian	2019	2.5	Jura	2021
+Italian	2019	13.2	Graubünden	2021
+Italian	2019	5.5	Glarus	2021
+Italian	2019	–	Appenzell Innerrhoden	2021
+Italian	2019	2.4	Fribourg	2021
+Italian	2019	3.1	Bern	2021
+Italian	2019	6.1	Basel-Stadt	2021
+Italian	2019	5.5	Basel-Landschaft	2021
+Italian	2019	5.7	Neuchâtel	2021
+Italian	2019	6.4	Geneva	2021
+Italian	2019	–	Nidwalden	2021
+Italian	2019	88.6	Ticino	2021
+Italian	2019	3.5	Saint Gallen	2021
+Italian	2019	3.9	Schaffhausen	2021
+Italian	2019	3.5	Schwyz	2021
+Italian	2019	4.8	Solothurn	2021
+Italian	2019	3.7	Thurgau	2021
+Italian	2019	–	Uri	2021
+Italian	2019	4.6	Valais	2021
+Italian	2019	5.0	Vaud	2021
+Italian	2019	4.3	Zug	2021
+Italian	2019	–	Appenzell Ausserrhoden	2021
+Italian	2019	5.6	Zurich	2021
+Italian	2019	5.1	Aargau	2021
+Italian	2019	–	Obwalden	2021
+Italian	2019	8.3	Switzerland	2021
