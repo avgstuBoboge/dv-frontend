@@ -6,11 +6,17 @@ import App from './App.vue'
 import router from "./router.js";
 import store from "./store.js";
 
-const app = createApp(App);
-app.use(ElementPlus);
-app.use(router)
-app.use(store);
+async function bootstrap() {
+    await store.dispatch('initData')
+    console.log(store.state.data)
+    const app = createApp(App);
+    app.use(ElementPlus);
+    app.use(router)
+    app.use(store);
+    store.commit('setRouter', router);
+    app.mount('#app');
+}
 
-store.commit('setRouter', router);
+bootstrap();
 
-app.mount('#app');
+

@@ -1,5 +1,4 @@
 <script setup>
-
 import SwissMap from "./SwissMap.vue";
 import SideBarRight from "./SideBarRight.vue";
 import SideBarLeft from "./SideBarLeft.vue";

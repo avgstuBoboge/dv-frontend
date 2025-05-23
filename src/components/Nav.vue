@@ -4,6 +4,9 @@ import store from "../store.js"
 function handlePush(route) {
   store.state.router.push(route);
 }
+
+const logoUrl = import.meta.env.BASE_URL + 'swiss-flag.png';
+
 </script>
 
 <template>
@@ -12,7 +15,7 @@ function handlePush(route) {
       <div class="logo-container">
         <el-image
             style="height: 100px;"
-            src="swiss-flag.png"
+            :src="logoUrl"
             fit="contain"/>
       </div>
       <h1>Happiness Index Across Swiss Cantons</h1>

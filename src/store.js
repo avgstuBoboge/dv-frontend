@@ -21,98 +21,122 @@ regions.forEach((region) => {
 
 name2Region["Zurich"] = name2Region["Zürich"];
 name2Region["Bern"] = name2Region["Bern/Berne"];
+name2Region["Berne"] = name2Region["Bern/Berne"];
 name2Region["Lucerne"] = name2Region["Luzern"];
 name2Region["Geneva"] = name2Region["Genève"];
 name2Region["Graubünden"] = name2Region["Graubünden/Grigioni"];
 name2Region["Valais"] = name2Region["Valais/Wallis"];
 name2Region["Saint Gallen"] = name2Region["St. Gallen"];
 
-const keywords = ["language", "population", "religion", "social-condition", "GDP"];
+const keywords = ["GDP", "language", "population", "religion", "social-condition"];
 
-const data = {};
-// create a set of years for each keyword
-const years = {};
-keywords.forEach((kw) => {
-    years[kw] = new Set();
-});
+
 const modulesMap = {
     language: import.meta.glob(`/src/assets/data/language/*.tsv`, {as: 'raw'}),
     population: import.meta.glob(`/src/assets/data/population/*.tsv`, {as: 'raw'}),
     religion: import.meta.glob(`/src/assets/data/religion/*.tsv`, {as: 'raw'}),
     'social-condition': import.meta.glob(`/src/assets/data/social-condition/*.tsv`, {as: 'raw'}),
-    gdp: import.meta.glob(`/src/assets/data/GDP/*.tsv`, {as: 'raw'}),
+    GDP: import.meta.glob(`/src/assets/data/GDP/*.tsv`, {as: 'raw'}),
 };
 
 // create a set of missed regions
-const missedRegions = new Set();
-
-async function loadData(kw) {
-    const modules = modulesMap[kw];
-    console.log(modules);
-    for (const path in modules) {
-        const content = await modules[path]();
-        const data = d3.tsvParse(content);
-        data.forEach((row) => {
-            if (kw === "GDP") {
-                const {Canton, ...values} = row;
-                const yearKeys = Object.keys(values);
-                yearKeys.forEach((year) => {
-                    years[kw].add(year);
-                    const value = values[year];
-                    if (!name2Region[Canton]) {
-                        missedRegions.add(Canton);
-                    } else {
-                        const id = name2Region[Canton].id;
-                        if (!data[id]) data[id] = {};
-                        if (!data[id][year]) data[id][year] = {};
-                        if (!data[id][year][kw]) data[id][year][kw] = {};
-                        data[id][year][kw]['GDP'] = value;
-                    }
-                });
-            } else {
-                const {title, year, value, canton, file_year} = row;
-                years[kw].add(year);
-                if (!name2Region[canton]) {
-                    missedRegions.add(canton);
+async function load() {
+    const data = {};
+    const years = {};
+    keywords.forEach(kw => {
+        years[kw] = new Set();
+    });
+    const missedRegions = new Set(); // Only for debugging
+    async function loadData(kw) {
+        const modules = modulesMap[kw];
+        for (const path in modules) {
+            const content = await modules[path]();
+            const parsedTsv = d3.tsvParse(content);
+            parsedTsv.forEach((row) => {
+                if (kw === "GDP") {
+                    const {Canton, ...values} = row;
+                    const yearKeys = Object.keys(values);
+                    yearKeys.forEach((year) => {
+                        years[kw].add(year);
+                        const value = values[year];
+                        if (!name2Region[Canton]) {
+                            missedRegions.add(Canton);
+                        } else {
+                            const id = name2Region[Canton].id;
+                            if (!data[kw]) data[kw] = {};
+                            if (!data[kw][year]) data[kw][year] = {};
+                            if (!data[kw][year][id]) data[kw][year][id] = {};
+                            data[kw][year][id]['GDP'] = value;
+                        }
+                    });
                 } else {
-                    const id = name2Region[canton].id;
-                    if (!data[id]) data[id] = {};
-                    if (!data[id][year]) data[id][year] = {};
-                    if (!data[id][year][kw]) data[id][year][kw] = {};
-                    data[id][year][kw][title] = value;
+                    const {title, year, value, canton, file_year} = row;
+                    years[kw].add(year);
+                    if (!name2Region[canton]) {
+                        missedRegions.add(canton);
+                    } else {
+                        const id = name2Region[canton].id;
+                        if (!data[kw]) data[kw] = {};
+                        if (!data[kw][year]) data[kw][year] = {};
+                        if (!data[kw][year][id]) data[kw][year][id] = {};
+                        data[kw][year][id][title] = value;
+                    }
                 }
-            }
+            });
+        }
+    }
+
+    for (const kw of keywords) {
+        await loadData(kw);
+    }
+    const sortedYears = {};
+    for (const kw of keywords) {
+        sortedYears[kw] = Array.from(years[kw]).sort((a, b) => {
+            if (a > b) return -1;
+            if (a < b) return 1;
+            return 0;
         });
     }
+
+    return {data, sortedYears};
 }
 
-let loaded = 0;
-
-for (const kw of keywords) {
-    await loadData(kw);
-}
 
 const store = createStore({
     state: () => ({
-        router: null,
+        data: {},
+        years: {},
+        keywords,
         regionStack: [],
         comparing: false,
-        data: data,
-        keywords: keywords,
+        activeKeyword: null,
+        activeYear: null
     }),
     mutations: {
-        setRouter(state, router) {
-            state.router = router;
+        setData(state, payload) {
+            state.data = payload
+        },
+        setYears(state, payload) {
+            state.years = payload
+        },
+        resetStack(state) {
+            state.regionStack = []
         },
         pushRegion(state, region) {
-            state.regionStack.push(region);
-            // maintain only the last 2 regions
-            if (state.regionStack.length > 2) {
-                state.regionStack.shift();
-            }
+            state.regionStack.push(region)
+            if (state.regionStack.length > 2) state.regionStack.shift()
         },
+        setRouter(state, router) {
+            state.router = router
+        }
     },
-    actions: {}
+    actions: {
+        async initData({commit}) {
+            const {data, sortedYears} = await load();
+            commit('setData', data);
+            commit('setYears', sortedYears);
+        }
+    }
 })
 
 export default store;

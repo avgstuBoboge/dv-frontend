@@ -1,10 +1,24 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import {onMounted, computed, ref, watch} from "vue";
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 import store from "../store.js";
 
 const svgContainer = ref(null);
+
+const formatKeyword = (keyword) => {
+  if (!keyword) return "";
+  return keyword
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+}
+
+const title = computed(() => {
+  const kw = formatKeyword(store.state.activeKeyword);
+  const yr = store.state.activeYear;
+  return kw && yr ? `${kw} - ${yr}` : "";
+});
 
 onMounted(async () => {
   const width = 800;
@@ -63,63 +77,30 @@ onMounted(async () => {
       .attr("fill-opacity", 0.5)
       .attr("stroke", "#666")
       .attr("stroke-width", 1)
-      .on("mouseover", function (event, d) {
-        d3.select(this)
-            .transition()
-            .duration(200)
-            .attr("fill-opacity", 1)
-            .attr("stroke", "black")
-            .attr("stroke-width", 2);
-        tooltip
-            .transition()
-            .duration(200)
-            .style("opacity", 0.9);
-        tooltip
-            .html(`<strong>${d.properties.name}</strong><br/>GDP: $<em>(placeholder)</em>`)
-            .style("color", "red")
-            .style("left", event.pageX + 10 + "px")
-            .style("top", event.pageY - 28 + "px");
-      })
-      .on("mousemove", function (event) {
-        tooltip
-            .style("left", event.pageX + 10 + "px")
-            .style("top", event.pageY - 28 + "px");
-      })
-      .on("mouseout", function () {
-        let currentStack = store.state.regionStack;
-        let highlightIds = [];
-        if (store.state.comparing) {
-          const len = currentStack.length;
-          if (len > 0) highlightIds.push(currentStack[len - 1].id);
-          if (len > 1) highlightIds.push(currentStack[len - 2].id);
-        } else {
-          if (currentStack.length) highlightIds.push(currentStack[currentStack.length - 1].id);
-        }
-        if (!highlightIds.includes(this.__data__.id)) {
-          d3.select(this)
-              .transition()
-              .duration(200)
-              .attr("fill-opacity", 0.5)
-              .attr("stroke", "#666")
-              .attr("stroke-width", 1);
-        }
-        tooltip
-            .transition()
-            .duration(200)
-            .style("opacity", 0);
-      })
       .on("click", function (event, d) {
         event.stopPropagation();
-        if (
-            store.state.regionStack.length === 0 ||
-            store.state.regionStack[store.state.regionStack.length - 1].id !== d.id
-        ) {
-          store.commit("pushRegion", {
-            name: d.properties.name,
-            id: d.id,
-          });
-        }
+        store.commit("pushRegion", {name: d.properties.name, id: d.id});
       });
+
+  const onMouseOver = (event, d) => {
+    const kw = store.state.activeKeyword;
+    const yr = store.state.activeYear;
+    const val = store.state.data[kw]?.[yr]?.[d.id] || {};
+    const html = `<strong>${d.properties.name}</strong><br/>` +
+        Object.entries(val).map(([k, v]) => `${k}: ${v}`).join("<br/>");
+
+    tooltip.html(html)
+        .style("left", event.pageX + 10 + "px")
+        .style("top", event.pageY - 28 + "px")
+        .transition().duration(200).style("opacity", 0.9);
+  };
+  const onMouseMove = (event) => {
+    tooltip.style("left", event.pageX + 10 + "px")
+        .style("top", event.pageY - 28 + "px");
+  };
+  const onMouseOut = () => {
+    tooltip.transition().duration(200).style("opacity", 0);
+  };
 
   const zoom = d3.zoom()
       .scaleExtent([1, 8])
@@ -127,6 +108,27 @@ onMounted(async () => {
         g.attr("transform", event.transform);
       });
   svg.call(zoom);
+
+  const updateMap = () => {
+    const kw = store.state.activeKeyword;
+    const yr = store.state.activeYear;
+    store.commit("resetStack");
+
+    regions
+        .on("mouseover", onMouseOver)
+        .on("mousemove", onMouseMove)
+        .on("mouseout", onMouseOut)
+        .transition().duration(500)
+        .attr("fill", d => {
+          const v = store.state.data[kw]?.[yr]?.[d.id];
+          return v != null ? colorScale(v) : "#eee";
+        });
+  };
+
+  watch(
+      () => [store.state.activeKeyword, store.state.activeYear],
+      updateMap
+  );
 
   watch(
       () => store.state.regionStack,
@@ -157,23 +159,31 @@ onMounted(async () => {
           }
         });
       },
-      { immediate: true, deep: true }
+      {immediate: true, deep: true}
   );
 });
 </script>
 
+
 <template>
   <el-card>
+    <div class="map-title">{{ title }}</div>
     <div ref="svgContainer" class="svg-container"></div>
   </el-card>
 </template>
 
 <style scoped>
+.map-title {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
 .svg-container {
   width: 100%;
   height: 100%;
   border: 1px solid #ccc;
-  margin: auto;
 }
 
 .tooltip {
