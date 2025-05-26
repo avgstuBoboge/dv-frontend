@@ -8,10 +8,19 @@ const lastSelectedRegion = computed(() => {
   const stack = store.state.regionStack;
   return stack.length > 0 ? stack[stack.length - 1] : {};
 });
+const lastSelectedRegionUrl = computed(() => {
+  const region = lastSelectedRegion.value;
+  return region.id ? `/com-480-project-Ficciones/region/${region.id}` : '';
+});
+
 const secondToLastSelectedRegion = computed(() => {
   const stack = store.state.regionStack
   return stack.length > 1 ? stack[stack.length - 2] : {}
-})
+});
+const secondToLastSelectedRegionUrl = computed(() => {
+  const region = secondToLastSelectedRegion.value;
+  return region.id ? `/com-480-project-Ficciones/region/${region.id}` : '';
+});
 const regionInfo = computed(() => {
   const kw = store.state.activeKeyword
   const yr = store.state.activeYear
@@ -86,6 +95,30 @@ watch(
     <template v-if="comparing">
       <h3 v-if="secondToLastSelectedRegion.id">Comparing Regions</h3>
       <div v-if="secondToLastSelectedRegion.id">
+        <h4>Region 1: {{ secondToLastSelectedRegion.name }}</h4>
+        <div v-for="([key, value], idx) in Object.entries(regionInfo2)" :key="idx">
+          <p><strong>{{ key }}:</strong> {{ value }}</p>
+        </div>
+        <el-link
+            type="primary"
+            underline="always"
+            :href="secondToLastSelectedRegionUrl"
+            target="_blank"
+        >
+          Click here to see the details...
+        </el-link>
+        <h4>Region 2: {{ lastSelectedRegion.name }}</h4>
+        <div v-for="([key, value], idx) in Object.entries(regionInfo)" :key="idx">
+          <p><strong>{{ key }}:</strong> {{ value }}</p>
+        </div>
+        <el-link
+            type="primary"
+            underline="always"
+            :href="lastSelectedRegionUrl"
+            target="_blank"
+        >
+          Click here to see the details...
+        </el-link>
         <div
             v-for="([key], idx) in Object.entries(regionInfo)"
             :key="key"
@@ -106,6 +139,14 @@ watch(
         <div v-for="([key, value], idx) in Object.entries(regionInfo)" :key="idx">
           <p><strong>{{ key }}:</strong> {{ value }}</p>
         </div>
+        <el-link
+            type="primary"
+            underline="always"
+            :href="lastSelectedRegionUrl"
+            target="_blank"
+        >
+          Click here to see the details...
+        </el-link>
       </template>
       <template v-else>
         <p>Details about the selected region will be shown here.</p>

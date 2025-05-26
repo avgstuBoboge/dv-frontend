@@ -29,7 +29,7 @@ name2Region["Valais"] = name2Region["Valais/Wallis"];
 name2Region["Saint Gallen"] = name2Region["St. Gallen"];
 
 const keywords = ["GDP", "language", "population", "religion", "social-condition"];
-
+const subKeywords = {};
 
 const modulesMap = {
     language: import.meta.glob(`/src/assets/data/language/*.tsv`, {as: 'raw'}),
@@ -43,8 +43,10 @@ const modulesMap = {
 async function load() {
     const data = {};
     const years = {};
+    const regionData = {};
     keywords.forEach(kw => {
         years[kw] = new Set();
+        subKeywords[kw] = new Set();
     });
     const missedRegions = new Set(); // Only for debugging
     async function loadData(kw) {
@@ -54,6 +56,7 @@ async function load() {
             const parsedTsv = d3.tsvParse(content);
             parsedTsv.forEach((row) => {
                 if (kw === "GDP") {
+                    subKeywords[kw].add("GDP");
                     const {Canton, ...values} = row;
                     const yearKeys = Object.keys(values);
                     yearKeys.forEach((year) => {
@@ -67,10 +70,15 @@ async function load() {
                             if (!data[kw][year]) data[kw][year] = {};
                             if (!data[kw][year][id]) data[kw][year][id] = {};
                             data[kw][year][id]['GDP'] = value;
+                            if (!regionData[id]) regionData[id] = {};
+                            if (!regionData[id][year]) regionData[id][year] = {};
+                            if (!regionData[id][year][kw]) regionData[id][year][kw] = {};
+                            regionData[id][year][kw]['GDP'] = value;
                         }
                     });
                 } else {
                     const {title, year, value, canton, file_year} = row;
+                    subKeywords[kw].add(title);
                     years[kw].add(year);
                     if (!name2Region[canton]) {
                         missedRegions.add(canton);
@@ -80,6 +88,10 @@ async function load() {
                         if (!data[kw][year]) data[kw][year] = {};
                         if (!data[kw][year][id]) data[kw][year][id] = {};
                         data[kw][year][id][title] = value;
+                        if (!regionData[id]) regionData[id] = {};
+                        if (!regionData[id][year]) regionData[id][year] = {};
+                        if (!regionData[id][year][kw]) regionData[id][year][kw] = {};
+                        regionData[id][year][kw][title] = value;
                     }
                 }
             });
@@ -98,26 +110,38 @@ async function load() {
         });
     }
 
-    return {data, sortedYears};
+    return {data, regionData, sortedYears};
 }
 
 
 const store = createStore({
     state: () => ({
         data: {},
+        regionData: {},
         years: {},
-        keywords,
+        keywords: [],
+        subKeywords: {},
         regionStack: [],
         comparing: false,
         activeKeyword: null,
-        activeYear: null
+        activeYear: null,
+        id2Region: id2Region,
     }),
     mutations: {
         setData(state, payload) {
             state.data = payload
         },
+        setRegionData(state, payload) {
+            state.regionData = payload
+        },
         setYears(state, payload) {
             state.years = payload
+        },
+        setKeywords(state, payload) {
+            state.keywords = payload;
+        },
+        setSubKeywords(state, payload) {
+            state.subKeywords = payload;
         },
         resetStack(state) {
             state.regionStack = []
@@ -132,9 +156,12 @@ const store = createStore({
     },
     actions: {
         async initData({commit}) {
-            const {data, sortedYears} = await load();
+            const {data, regionData, sortedYears} = await load();
             commit('setData', data);
+            commit('setRegionData', regionData);
             commit('setYears', sortedYears);
+            commit('setKeywords', keywords);
+            commit('setSubKeywords', subKeywords);
         }
     }
 })
