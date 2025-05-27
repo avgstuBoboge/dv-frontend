@@ -234,6 +234,11 @@ function drawChart(data) {
 
     xAxis.transition().duration(800).call(d3.axisBottom(x));
     // yAxis.transition().duration(800).call(d3.axisLeft(y));
+    // Increase font size of X axis labels
+    xAxis.selectAll('text').style('font-size', '20px');
+
+    // Increase font size of Y axis labels
+    yAxis.selectAll('text').style('font-size', '20px');
 
     yearText.text(`Year: ${new Date(tick).getFullYear()}`);
     idx++;
