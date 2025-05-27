@@ -127,34 +127,6 @@ const generateRace = () => {
   const data = generateData()
   drawChart(data)
 }
-const cantonAbbrMap = {
-  "Zürich": "ZH",
-  "Bern/Berne": "BE",
-  "Luzern": "LU",
-  "Uri": "UR",
-  "Schwyz": "SZ",
-  "Obwalden": "OW",
-  "Nidwalden": "NW",
-  "Glarus": "GL",
-  "Zug": "ZG",
-  "Fribourg": "FR",
-  "Solothurn": "SO",
-  "Basel-Stadt": "BS",
-  "Basel-Landschaft": "BL",
-  "Schaffhausen": "SH",
-  "Appenzell Ausserrhoden": "AR",
-  "Appenzell Innerrhoden": "AI",
-  "St. Gallen": "SG",
-  "Graubünden/Grigioni": "GR",
-  "Aargau": "AG",
-  "Thurgau": "TG",
-  "Ticino": "TI",
-  "Vaud": "VD",
-  "Valais/Wallis": "VS",
-  "Neuchâtel": "NE",
-  "Genève": "GE",
-  "Jura": "JU"
-};
 
 function drawChart(data) {
 
@@ -167,7 +139,7 @@ function drawChart(data) {
       .domain(categories)
       .range(fadedColors);
 
-  const margin = {top: 50, right: 50, bottom: 50, left: 100};
+  const margin = {top: 50, right: 50, bottom: 50, left: 200};
   const width = 1200 - margin.left - margin.right;
   const height = 600 - margin.top - margin.bottom;
   const topN = 10;
@@ -212,9 +184,6 @@ function drawChart(data) {
 
     x.domain([0, d3.max(yearData, d => d.value)]);
     y.domain(yearData.map(d => d.name));
-    yAxis.transition().duration(800).call(
-    d3.axisLeft(y).tickFormat(d => cantonAbbrMap[d] || d)
-  );
 
     const bars = svg.selectAll('.bar').data(yearData, d => d.name);
     bars.enter()
@@ -233,7 +202,7 @@ function drawChart(data) {
     bars.exit().remove();
 
     xAxis.transition().duration(800).call(d3.axisBottom(x));
-    // yAxis.transition().duration(800).call(d3.axisLeft(y));
+    yAxis.transition().duration(800).call(d3.axisLeft(y));
     // Increase font size of X axis labels
     xAxis.selectAll('text').style('font-size', '20px');
 
