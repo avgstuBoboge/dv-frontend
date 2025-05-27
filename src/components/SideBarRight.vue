@@ -103,7 +103,6 @@ watch(
             type="primary"
             underline="always"
             :href="secondToLastSelectedRegionUrl"
-            target="_blank"
         >
           Click here to see the details...
         </el-link>
@@ -115,7 +114,6 @@ watch(
             type="primary"
             underline="always"
             :href="lastSelectedRegionUrl"
-            target="_blank"
         >
           Click here to see the details...
         </el-link>
@@ -143,7 +141,6 @@ watch(
             type="primary"
             underline="always"
             :href="lastSelectedRegionUrl"
-            target="_blank"
         >
           Click here to see the details...
         </el-link>
