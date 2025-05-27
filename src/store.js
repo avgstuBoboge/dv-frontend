@@ -39,13 +39,16 @@ const modulesMap = {
     GDP: import.meta.glob(`/src/assets/data/GDP/*.tsv`, {as: 'raw'}),
 };
 
+const years = new Set();
+
 // create a set of missed regions
 async function load() {
     const data = {};
-    const years = {};
+    const keywordYears = {};
     const regionData = {};
+    const sumOfValues = {};
     keywords.forEach(kw => {
-        years[kw] = new Set();
+        keywordYears[kw] = new Set();
         subKeywords[kw] = new Set();
     });
     const missedRegions = new Set(); // Only for debugging
@@ -60,7 +63,8 @@ async function load() {
                     const {Canton, ...values} = row;
                     const yearKeys = Object.keys(values);
                     yearKeys.forEach((year) => {
-                        years[kw].add(year);
+                        years.add(year);
+                        keywordYears[kw].add(year);
                         const value = values[year];
                         if (!name2Region[Canton]) {
                             missedRegions.add(Canton);
@@ -74,12 +78,19 @@ async function load() {
                             if (!regionData[id][year]) regionData[id][year] = {};
                             if (!regionData[id][year][kw]) regionData[id][year][kw] = {};
                             regionData[id][year][kw]['GDP'] = value;
+                            if (!sumOfValues[kw]) sumOfValues[kw] = {};
+                            if (!sumOfValues[kw]['GDP']) sumOfValues[kw]['GDP'] = {};
+                            if (!sumOfValues[kw]['GDP'][year]) sumOfValues[kw]['GDP'][year] = 0;
+                            if (value !== '–') {
+                                sumOfValues[kw]['GDP'][year] += parseFloat(value.replace(',', ''));
+                            }
                         }
                     });
                 } else {
                     const {title, year, value, canton, file_year} = row;
                     subKeywords[kw].add(title);
-                    years[kw].add(year);
+                    years.add(year);
+                    keywordYears[kw].add(year);
                     if (!name2Region[canton]) {
                         missedRegions.add(canton);
                     } else {
@@ -92,6 +103,12 @@ async function load() {
                         if (!regionData[id][year]) regionData[id][year] = {};
                         if (!regionData[id][year][kw]) regionData[id][year][kw] = {};
                         regionData[id][year][kw][title] = value;
+                        if (!sumOfValues[kw]) sumOfValues[kw] = {};
+                        if (!sumOfValues[kw][title]) sumOfValues[kw][title] = {};
+                        if (!sumOfValues[kw][title][year]) sumOfValues[kw][title][year] = 0;
+                        if (value !== '–') {
+                            sumOfValues[kw][title][year] += parseFloat(value.replace(',', ''));
+                        }
                     }
                 }
             });
@@ -103,14 +120,14 @@ async function load() {
     }
     const sortedYears = {};
     for (const kw of keywords) {
-        sortedYears[kw] = Array.from(years[kw]).sort((a, b) => {
+        sortedYears[kw] = Array.from(keywordYears[kw]).sort((a, b) => {
             if (a > b) return -1;
             if (a < b) return 1;
             return 0;
         });
     }
 
-    return {data, regionData, sortedYears};
+    return {data, regionData, sortedYears, sumOfValues};
 }
 
 
@@ -118,7 +135,8 @@ const store = createStore({
     state: () => ({
         data: {},
         regionData: {},
-        years: {},
+        sumOfValues: {},
+        keywordYears: {},
         keywords: [],
         subKeywords: {},
         regionStack: [],
@@ -126,6 +144,7 @@ const store = createStore({
         activeKeyword: null,
         activeYear: null,
         id2Region: id2Region,
+        regions: regions,
     }),
     mutations: {
         setData(state, payload) {
@@ -135,7 +154,13 @@ const store = createStore({
             state.regionData = payload
         },
         setYears(state, payload) {
-            state.years = payload
+            state.years = payload;
+        },
+        setSumOfValues(state, payload) {
+            state.sumOfValues = payload
+        },
+        setKeywordYears(state, payload) {
+            state.keywordYears = payload
         },
         setKeywords(state, payload) {
             state.keywords = payload;
@@ -156,10 +181,12 @@ const store = createStore({
     },
     actions: {
         async initData({commit}) {
-            const {data, regionData, sortedYears} = await load();
+            const {data, regionData, sortedYears, sumOfValues} = await load();
             commit('setData', data);
             commit('setRegionData', regionData);
-            commit('setYears', sortedYears);
+            commit('setYears', Array.from(years).sort());
+            commit('setSumOfValues', sumOfValues);
+            commit('setKeywordYears', sortedYears);
             commit('setKeywords', keywords);
             commit('setSubKeywords', subKeywords);
         }

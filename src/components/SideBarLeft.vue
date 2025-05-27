@@ -19,7 +19,7 @@ const activeKeywordYear = (kw, year) => {
     <el-sub-menu v-for="kw in store.state.keywords" :index="kw">
       <template #title>{{ formatKeyword(kw) }}</template>
       <el-menu-item
-          v-for="year in store.state.years[kw]"
+          v-for="year in store.state.keywordYears[kw]"
           :index="kw + '-' + year"
           @click="activeKeywordYear(kw, year)"
       >
