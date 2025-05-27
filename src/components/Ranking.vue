@@ -139,7 +139,7 @@ function drawChart(data) {
       .domain(categories)
       .range(fadedColors);
 
-  const margin = {top: 50, right: 50, bottom: 50, left: 100};
+  const margin = {top: 50, right: 50, bottom: 50, left: 200};
   const width = 1200 - margin.left - margin.right;
   const height = 600 - margin.top - margin.bottom;
   const topN = 10;
@@ -203,6 +203,11 @@ function drawChart(data) {
 
     xAxis.transition().duration(800).call(d3.axisBottom(x));
     yAxis.transition().duration(800).call(d3.axisLeft(y));
+    // Increase font size of X axis labels
+    xAxis.selectAll('text').style('font-size', '20px');
+
+    // Increase font size of Y axis labels
+    yAxis.selectAll('text').style('font-size', '20px');
 
     yearText.text(`Year: ${new Date(tick).getFullYear()}`);
     idx++;
