@@ -11,7 +11,7 @@ const routes = [
 ];
 
 const router = createRouter({
-    history: createWebHistory('/com-480-project-Ficciones/'),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes,
 });
 

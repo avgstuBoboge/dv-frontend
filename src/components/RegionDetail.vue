@@ -153,6 +153,7 @@ const generateLineChart = () => {
   padding: 16px;
   width: 800px;
   margin: 0 auto;
+  margin-top: 20px;
 }
 
 .text-center {

@@ -1,6 +1,7 @@
 <script setup>
 import {computed, ref, watch} from 'vue'
 import store from "../store.js"
+import router from "../router.js";
 import {Chart} from '@antv/g2'
 
 const comparing = ref(false);
@@ -8,19 +9,17 @@ const lastSelectedRegion = computed(() => {
   const stack = store.state.regionStack;
   return stack.length > 0 ? stack[stack.length - 1] : {};
 });
-const lastSelectedRegionUrl = computed(() => {
-  const region = lastSelectedRegion.value;
-  return region.id ? `/com-480-project-Ficciones/region/${region.id}` : '';
-});
 
 const secondToLastSelectedRegion = computed(() => {
   const stack = store.state.regionStack
   return stack.length > 1 ? stack[stack.length - 2] : {}
 });
-const secondToLastSelectedRegionUrl = computed(() => {
-  const region = secondToLastSelectedRegion.value;
-  return region.id ? `/com-480-project-Ficciones/region/${region.id}` : '';
-});
+
+const toRegionDetails = (region) => {
+  if (!region.id) return;
+  router.push('/region/' + region.id);
+}
+
 const regionInfo = computed(() => {
   const kw = store.state.activeKeyword
   const yr = store.state.activeYear
@@ -102,7 +101,8 @@ watch(
         <el-link
             type="primary"
             underline="always"
-            :href="secondToLastSelectedRegionUrl"
+            @click="toRegionDetails(secondToLastSelectedRegion)"
+            target="_blank"
         >
           Click here to see the details...
         </el-link>
@@ -113,7 +113,8 @@ watch(
         <el-link
             type="primary"
             underline="always"
-            :href="lastSelectedRegionUrl"
+            @click="toRegionDetails(lastSelectedRegion)"
+            target="_blank"
         >
           Click here to see the details...
         </el-link>
@@ -140,7 +141,8 @@ watch(
         <el-link
             type="primary"
             underline="always"
-            :href="lastSelectedRegionUrl"
+            @click="toRegionDetails(lastSelectedRegion)"
+            target="_blank"
         >
           Click here to see the details...
         </el-link>
